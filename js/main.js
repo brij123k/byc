@@ -42,7 +42,8 @@
 
   /* ---------- Countdown ---------- */
   const countdown = $("#countdown");
-  const target = new Date(countdown.dataset.target).getTime();
+  const countdownLabel = $(".countdown-label", countdown);
+  const events = JSON.parse(countdown.dataset.events).map(([label, at]) => ({ label, at: new Date(at).getTime() }));
   const units = {
     days: $('[data-unit="days"]', countdown),
     hours: $('[data-unit="hours"]', countdown),
@@ -52,7 +53,10 @@
   const pad = (n) => String(n).padStart(2, "0");
 
   function tick() {
-    const diff = Math.max(0, target - Date.now());
+    // Count down to the next event; once all have started, stay on the last one.
+    const next = events.find((ev) => ev.at > Date.now()) || events[events.length - 1];
+    countdownLabel.textContent = next.label;
+    const diff = Math.max(0, next.at - Date.now());
     units.days.textContent = pad(Math.floor(diff / 86400000));
     units.hours.textContent = pad(Math.floor((diff / 3600000) % 24));
     units.minutes.textContent = pad(Math.floor((diff / 60000) % 60));
@@ -129,6 +133,25 @@
   const submitLabel = submitBtn.textContent;
   const phoneInput = $("#phone");
 
+  // Event links (hero cards, Hyderabad section) pre-select the matching option in the form.
+  $$("a[data-attend]").forEach((link) =>
+    link.addEventListener("click", () => {
+      const radio = $(`input[name="attend"][value="${link.dataset.attend}"]`, form);
+      if (radio) radio.checked = true;
+    })
+  );
+
+  const EVENTS = {
+    webinar: "the Online Webinar on Saturday, 10 Oct 2026 at 8:00 PM IST. We'll send the webinar access details to",
+    hyderabad: "the in-person session in Hyderabad on Sunday, 18 Oct 2026 (10 AM – 6 PM). We'll send your session confirmation to",
+    both: "the Online Webinar (10 Oct, 8:00 PM IST) and the Hyderabad session (18 Oct, 10 AM – 6 PM). We'll send the details to",
+  };
+  const EVENT_NAMES = {
+    webinar: "Top Singapore Universities | Online Webinar | 10 Oct 2026, 8:00 PM",
+    hyderabad: "Top Singapore Universities | Hyderabad In-Person | 18 Oct 2026, 10 AM – 6 PM",
+    both: "Top Singapore Universities | Online 10 Oct 2026 + Hyderabad 18 Oct 2026",
+  };
+
   phoneInput.addEventListener("input", () => {
     phoneInput.value = phoneInput.value.replace(/\D/g, "").slice(0, 15);
   });
@@ -169,7 +192,7 @@
     }
 
     const data = Object.fromEntries(new FormData(form).entries());
-    data.event = "Top Singapore Universities Webinar | Online | 10 Oct 2026, 8:00 PM";
+    data.event = EVENT_NAMES[data.attend];
     data.submittedAt = new Date().toISOString();
 
     submitBtn.disabled = true;
@@ -192,8 +215,7 @@
         <div class="form-success">
           <div class="tick">✓</div>
           <h3>Your spot is saved, ${escapeHtml(data.parentName.split(" ")[0])}!</h3>
-          <p>You're registered for the <strong>Top Singapore Universities</strong> webinar on Saturday, 10 Oct 2026 at 8:00 PM IST.
-          We'll send the webinar access details to ${escapeHtml(data.email)}.</p>
+          <p>You're registered for ${EVENTS[data.attend]} ${escapeHtml(data.email)}.</p>
         </div>`;
     } catch (err) {
       console.error(err);
