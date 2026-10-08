@@ -1,4 +1,4 @@
-/* BYC – Careers in Design landing page */
+/* BYC – Top Singapore Universities webinar landing page */
 (function () {
   "use strict";
 
@@ -89,33 +89,15 @@
   );
   $$(".count").forEach((el) => counterObserver.observe(el));
 
-  /* ---------- Success wall filters ---------- */
-  const filters = $$(".filter");
+  /* ---------- Lightbox (Singapore admits wall) ---------- */
   const wallItems = $$(".wall-item");
-
-  filters.forEach((btn) =>
-    btn.addEventListener("click", () => {
-      filters.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      const f = btn.dataset.filter;
-      wallItems.forEach((item) => {
-        const cats = item.dataset.cat.split(" ");
-        item.classList.toggle("hide", f !== "all" && !cats.includes(f));
-      });
-    })
-  );
-
-  /* ---------- Lightbox ---------- */
   const lightbox = $("#lightbox");
   const lbImg = $("#lbImg");
   let current = 0;
 
-  const visibleItems = () => wallItems.filter((i) => !i.classList.contains("hide"));
-
   function openLightbox(index) {
-    const items = visibleItems();
-    current = (index + items.length) % items.length;
-    const img = $("img", items[current]);
+    current = (index + wallItems.length) % wallItems.length;
+    const img = $("img", wallItems[current]);
     lbImg.src = img.src;
     lbImg.alt = img.alt;
     lightbox.classList.add("open");
@@ -128,9 +110,7 @@
     document.body.style.overflow = "";
   }
 
-  wallItems.forEach((item) =>
-    item.addEventListener("click", () => openLightbox(visibleItems().indexOf(item)))
-  );
+  wallItems.forEach((item, i) => item.addEventListener("click", () => openLightbox(i)));
   $(".lb-close").addEventListener("click", closeLightbox);
   $(".lb-prev").addEventListener("click", (e) => { e.stopPropagation(); openLightbox(current - 1); });
   $(".lb-next").addEventListener("click", (e) => { e.stopPropagation(); openLightbox(current + 1); });
@@ -146,6 +126,7 @@
   const form = $("#regForm");
   const msg = $("#formMsg");
   const submitBtn = $("#submitBtn");
+  const submitLabel = submitBtn.textContent;
   const phoneInput = $("#phone");
 
   phoneInput.addEventListener("input", () => {
@@ -188,7 +169,7 @@
     }
 
     const data = Object.fromEntries(new FormData(form).entries());
-    data.event = "CCS – Careers in Design | Hyderabad | 10 Oct 2026";
+    data.event = "Top Singapore Universities Webinar | Online | 10 Oct 2026, 8:00 PM";
     data.submittedAt = new Date().toISOString();
 
     submitBtn.disabled = true;
@@ -210,15 +191,15 @@
       form.innerHTML = `
         <div class="form-success">
           <div class="tick">✓</div>
-          <h3>You're registered, ${escapeHtml(data.fullName.split(" ")[0])}!</h3>
-          <p>We've saved your seat for <strong>Careers in Design</strong> on Sat, 10 Oct 2026 at 1:30 PM IST, Hyatt Place, Hyderabad.
-          Our team will reach out to you shortly.</p>
+          <h3>Your spot is saved, ${escapeHtml(data.parentName.split(" ")[0])}!</h3>
+          <p>You're registered for the <strong>Top Singapore Universities</strong> webinar on Saturday, 10 Oct 2026 at 8:00 PM IST.
+          We'll send the webinar access details to ${escapeHtml(data.email)}.</p>
         </div>`;
     } catch (err) {
       console.error(err);
       setMsg("Something went wrong. Please try again.");
       submitBtn.disabled = false;
-      submitBtn.textContent = "Submit";
+      submitBtn.textContent = submitLabel;
     }
   });
 
