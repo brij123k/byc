@@ -2,9 +2,11 @@
 (function () {
   "use strict";
 
-  // Set this to your form backend (Google Apps Script, Formspree, CRM webhook, etc.).
-  // While empty, submissions are only logged to the console.
-  const FORM_ENDPOINT = "";
+  // Registrations are emailed to bookyourcampus@gmail.com via FormSubmit (formsubmit.co).
+  // The very first submission from the live site sends an activation email to that inbox;
+  // click "Activate Form" in it, and every registration after that arrives as an email.
+  // Set to "" to only log submissions to the console.
+  const FORM_ENDPOINT = "https://formsubmit.co/ajax/bookyourcampus@gmail.com";
 
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
@@ -152,6 +154,8 @@
     both: "Top Singapore Universities | Online 10 Oct 2026 + Hyderabad 18 Oct 2026",
   };
 
+  const ATTEND_LABELS = { webinar: "Online Webinar", hyderabad: "Hyderabad In-Person", both: "Both" };
+
   phoneInput.addEventListener("input", () => {
     phoneInput.value = phoneInput.value.replace(/\D/g, "").slice(0, 15);
   });
@@ -203,14 +207,18 @@
       if (FORM_ENDPOINT) {
         const res = await fetch(FORM_ENDPOINT, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(toEmail(data)),
         });
-        if (!res.ok) throw new Error("Request failed: " + res.status);
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || String(json.success) === "false") {
+          throw new Error("Request failed: " + res.status + " " + (json.message || ""));
+        }
       } else {
         console.log("Registration (no FORM_ENDPOINT set):", data);
       }
 
+      remember(REGISTERED_KEY);
       form.innerHTML = `
         <div class="form-success">
           <div class="tick">✓</div>
@@ -224,6 +232,77 @@
       submitBtn.textContent = submitLabel;
     }
   });
+
+  /* ---------- Registration popup ---------- */
+  // Opens shortly after every page load / refresh (but not once the visitor has registered).
+  // The real form is moved into the popup and put back in #register when it closes.
+  const POPUP_DELAY_MS = 3000;
+  const REGISTERED_KEY = "byc_registered";
+  const popup = $("#popup");
+  const popupSlot = $(".popup-slot", popup);
+  const formHome = form.parentNode;
+  const formNext = form.nextSibling;
+  let lastFocus = null;
+
+  function remember(key) {
+    try { sessionStorage.setItem(key, "1"); } catch (e) { /* storage unavailable */ }
+  }
+  function recalled(key) {
+    try { return sessionStorage.getItem(key) === "1"; } catch (e) { return false; }
+  }
+
+  function openPopup() {
+    if (popup.classList.contains("open")) return;
+    lastFocus = document.activeElement;
+    form.classList.add("in");
+    popupSlot.appendChild(form);
+    popup.classList.add("open");
+    popup.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    $(".popup-close", popup).focus();
+  }
+  function closePopup() {
+    if (!popup.classList.contains("open")) return;
+    formHome.insertBefore(form, formNext);
+    popup.classList.remove("open");
+    popup.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    lastFocus?.focus?.();
+  }
+
+  // Every "Save Your Spot" / "Reserve Your Session" link opens the popup instead of scrolling to the form.
+  $$('a[href="#register"]').forEach((link) =>
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      openPopup();
+    })
+  );
+
+  $(".popup-close", popup).addEventListener("click", closePopup);
+  popup.addEventListener("click", (e) => { if (e.target === popup) closePopup(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closePopup(); });
+
+  if (!recalled(REGISTERED_KEY)) setTimeout(openPopup, POPUP_DELAY_MS);
+
+  // Shapes a registration into the email BYC receives (one row per field, readable labels).
+  function toEmail(data) {
+    return {
+      _subject: `New registration (${ATTEND_LABELS[data.attend]}): ${data.parentName}`,
+      _template: "table",
+      _captcha: "false",
+      _replyto: data.email,
+      "Attending": ATTEND_LABELS[data.attend],
+      "Event": data.event,
+      "Parent's Name": data.parentName,
+      "Phone Number": `${data.countryCode} ${data.phone}`,
+      "Email Address": data.email,
+      "Student's Name": data.studentName,
+      "Current Grade": data.grade,
+      "School Name": data.school,
+      "Submitted At (IST)": new Date(data.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+      "Page": location.href,
+    };
+  }
 
   function escapeHtml(str) {
     return str.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
