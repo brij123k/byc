@@ -215,6 +215,9 @@ form.addEventListener("submit", async (e) => {
           template_params: {
             to_email: data.email,
             to_name: data.studentName,
+            city: "Hyderabad",
+            date: "18 Oct 2026",
+            time:"10 AM – 6 PM"
           }
         })
       }
