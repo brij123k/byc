@@ -295,7 +295,7 @@
       "Phone Number": `${data.countryCode} ${data.phone}`,
       "Email Address": data.email,
       "Student's Name": data.studentName,
-      "Current Grade": data.grade,
+      "Current Class": data.grade,
       "School Name": data.school,
       "Submitted At (IST)": new Date(data.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
       "Page": location.href,
