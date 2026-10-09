@@ -2,11 +2,9 @@
 (function () {
   "use strict";
 
-  // Registrations are emailed to bookyourcampus@gmail.com via FormSubmit (formsubmit.co).
-  // The very first submission from the live site sends an activation email to that inbox;
-  // click "Activate Form" in it, and every registration after that arrives as an email.
-  // Set to "" to only log submissions to the console.
-  const FORM_ENDPOINT = "https://formsubmit.co/ajax/bookyourcampus@gmail.com";
+  // FormSubmit delivers registrations and the attendee confirmation email.
+  const FORM_ENDPOINT = "https://formsubmit.co/bookyourcampus@gmail.com";
+  const WHATSAPP_GROUP_LINK = "{{WhatsApp Group Link}}";
 
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
@@ -132,7 +130,6 @@
   const form = $("#regForm");
   const msg = $("#formMsg");
   const submitBtn = $("#submitBtn");
-  const submitLabel = submitBtn.textContent;
   const phoneInput = $("#phone");
 
   // Event links (hero cards, Hyderabad section) pre-select the matching option in the form.
@@ -143,18 +140,6 @@
     })
   );
 
-  const EVENTS = {
-    webinar: "the Online Webinar on Saturday, 10 Oct 2026 at 8:00 PM IST. We'll send the webinar access details to",
-    hyderabad: "the in-person session in Hyderabad on Sunday, 18 Oct 2026 (10 AM – 6 PM). We'll send your session confirmation to",
-    both: "the Online Webinar (10 Oct, 8:00 PM IST) and the Hyderabad session (18 Oct, 10 AM – 6 PM). We'll send the details to",
-  };
-  const EVENT_NAMES = {
-    webinar: "Top Singapore Universities | Online Webinar | 10 Oct 2026, 8:00 PM",
-    hyderabad: "Top Singapore Universities | Hyderabad In-Person | 18 Oct 2026, 10 AM – 6 PM",
-    both: "Top Singapore Universities | Online 10 Oct 2026 + Hyderabad 18 Oct 2026",
-  };
-
-  const ATTEND_LABELS = { webinar: "Online Webinar", hyderabad: "Hyderabad In-Person", both: "Both" };
 
   phoneInput.addEventListener("input", () => {
     phoneInput.value = phoneInput.value.replace(/\D/g, "").slice(0, 15);
@@ -182,55 +167,37 @@
     el.addEventListener("input", () => el.closest(".field")?.classList.remove("invalid"))
   );
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
+  form.addEventListener("submit", (e) => {
     if (!validate()) {
+      e.preventDefault();
       setMsg("Please fill all the required fields!");
       $(".field.invalid input, .field.invalid select", form)?.focus();
       return;
     }
     if (!$("#terms").checked) {
+      e.preventDefault();
       setMsg("Please accept terms and conditions to proceed.");
       return;
     }
 
     const data = Object.fromEntries(new FormData(form).entries());
-    data.event = EVENT_NAMES[data.attend];
-    data.submittedAt = new Date().toISOString();
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Please wait…";
-    setMsg("");
-
-    try {
-      if (FORM_ENDPOINT) {
-        const res = await fetch(FORM_ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify(toEmail(data)),
-        });
-        const json = await res.json().catch(() => ({}));
-        if (!res.ok || String(json.success) === "false") {
-          throw new Error("Request failed: " + res.status + " " + (json.message || ""));
-        }
-      } else {
-        console.log("Registration (no FORM_ENDPOINT set):", data);
+    const response = `Dear ${data.parentName},\n\nThank you for registering for the BookYourCampus Singapore UG Admissions Session.\n\nYour seat is confirmed. Please find the event details below:\n\nDate: 17 October 2026\nTime: 10 AM – 6 PM\nLocation: Bangalore\n\nDuring the session, you can connect with the BYC team to understand university selection, admissions expectations, profile building and application strategy for Singapore universities.\n\nJoin the WhatsApp group for event updates:\n${WHATSAPP_GROUP_LINK}\n\nWe look forward to meeting you and helping you plan your child’s undergraduate journey.\n\nRegards,\nTeam BookYourCampus (BYC)\nwww.bookyourcampus.com`;
+    form.action = FORM_ENDPOINT;
+    form.method = "POST";
+    ["_autoresponse", "_subject", "_template", "_replyto"].forEach((name) => {
+      let field = form.querySelector(`[name="${name}"]`);
+      if (!field) {
+        field = document.createElement("input");
+        field.type = "hidden";
+        field.name = name;
+        form.appendChild(field);
       }
-
-      remember(REGISTERED_KEY);
-      form.innerHTML = `
-        <div class="form-success">
-          <div class="tick">✓</div>
-          <h3>Your spot is saved, ${escapeHtml(data.parentName.split(" ")[0])}!</h3>
-          <p>You're registered for ${EVENTS[data.attend]} ${escapeHtml(data.email)}.</p>
-        </div>`;
-    } catch (err) {
-      console.error(err);
-      setMsg("Something went wrong. Please try again.");
-      submitBtn.disabled = false;
-      submitBtn.textContent = submitLabel;
-    }
+      field.value = name === "_autoresponse" ? response : name === "_subject" ? "Your BookYourCampus Singapore UG Admissions Session is confirmed" : name === "_replyto" ? data.email : "table";
+    });
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending…";
+    setMsg("");
+    remember(REGISTERED_KEY);
   });
 
   /* ---------- Registration popup ---------- */
@@ -283,26 +250,6 @@
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closePopup(); });
 
   if (!recalled(REGISTERED_KEY)) setTimeout(openPopup, POPUP_DELAY_MS);
-
-  // Shapes a registration into the email BYC receives (one row per field, readable labels).
-  function toEmail(data) {
-    return {
-      _subject: `New registration (${ATTEND_LABELS[data.attend]}): ${data.parentName}`,
-      _template: "table",
-      _captcha: "false",
-      _replyto: data.email,
-      "Attending": ATTEND_LABELS[data.attend],
-      "Event": data.event,
-      "Parent's Name": data.parentName,
-      "Phone Number": `${data.countryCode} ${data.phone}`,
-      "Email Address": data.email,
-      "Student's Name": data.studentName,
-      "Current Grade": data.grade,
-      "School Name": data.school,
-      "Submitted At (IST)": new Date(data.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
-      "Page": location.href,
-    };
-  }
 
   function escapeHtml(str) {
     return str.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));

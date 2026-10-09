@@ -5,9 +5,9 @@
 (function () {
   "use strict";
 
-  // Registrations are emailed to bookyourcampus@gmail.com via FormSubmit (formsubmit.co).
-  // Set to "" to only log submissions to the console.
-  const FORM_ENDPOINT = "https://formsubmit.co/ajax/bookyourcampus@gmail.com";
+  // FormSubmit delivers registrations and the attendee confirmation email.
+  const FORM_ENDPOINT = "https://formsubmit.co/bookyourcampus@gmail.com";
+  const WHATSAPP_GROUP_LINK = "{{WhatsApp Group Link}}";
 
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
@@ -15,7 +15,6 @@
   const CITY = document.body.dataset.city;
   const WHEN = document.body.dataset.when;
   const START = new Date(document.body.dataset.start).getTime();
-  const EVENT_NAME = `Singapore Undergrad Admissions | ${CITY} In-Person | ${WHEN}`;
 
   /* ---------- Header shadow + sticky mobile CTA ---------- */
   const header = $(".site-header");
@@ -152,7 +151,6 @@
   const form = $("#regForm");
   const msg = $("#formMsg");
   const submitBtn = $("#submitBtn");
-  const submitLabel = submitBtn.textContent;
   const phoneInput = $("#phone");
 
   phoneInput.addEventListener("input", () => {
@@ -181,56 +179,103 @@
     el.addEventListener("input", () => el.closest(".field")?.classList.remove("invalid"))
   );
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    if (!validate()) {
-      setMsg("Please fill all the required fields!");
-      $(".field.invalid input, .field.invalid select", form)?.focus();
-      return;
-    }
-    if (!$("#terms").checked) {
-      setMsg("Please accept terms and conditions to proceed.");
-      return;
-    }
+  if (!validate()) {
+    setMsg("Please fill all the required fields!");
+    $(".field.invalid input, .field.invalid select", form)?.focus();
+    return;
+  }
 
-    const data = Object.fromEntries(new FormData(form).entries());
-    data.event = EVENT_NAME;
-    data.submittedAt = new Date().toISOString();
+  if (!$("#terms").checked) {
+    setMsg("Please accept terms and conditions to proceed.");
+    return;
+  }
 
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Please wait…";
-    setMsg("");
+  const data = Object.fromEntries(new FormData(form).entries());
 
-    try {
-      if (FORM_ENDPOINT) {
-        const res = await fetch(FORM_ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify(toEmail(data)),
-        });
-        const json = await res.json().catch(() => ({}));
-        if (!res.ok || String(json.success) === "false") {
-          throw new Error("Request failed: " + res.status + " " + (json.message || ""));
-        }
-      } else {
-        console.log("Registration (no FORM_ENDPOINT set):", data);
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Sending...";
+  setMsg("");
+
+  try {
+    // 1. Send confirmation email to the registering user via EmailJS
+    const emailResponse = await fetch(
+      "https://api.emailjs.com/api/v1.0/email/send",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          service_id: "service_0fofcvx",
+          template_id: "template_aekpoof",
+          user_id: "lAued2DOO_MRwpQXK",
+          template_params: {
+            to_email: data.email,
+            to_name: data.studentName,
+          }
+        })
       }
+    );
 
-      remember(REGISTERED_KEY);
-      form.innerHTML = `
-        <div class="form-success">
-          <div class="tick">✓</div>
-          <h3>Your seat is reserved, ${escapeHtml(data.parentName.split(" ")[0])}!</h3>
-          <p>You're registered for the ${escapeHtml(CITY)} session on ${escapeHtml(WHEN)}. We'll send your confirmation to ${escapeHtml(data.email)}.</p>
-        </div>`;
-    } catch (err) {
-      console.error(err);
-      setMsg("Something went wrong. Please try again.");
-      submitBtn.disabled = false;
-      submitBtn.textContent = submitLabel;
+    if (!emailResponse.ok) {
+      throw new Error("Confirmation email failed. Please try again.");
     }
-  });
+
+    // 2. Send registration details to your own email via FormSubmit
+    const formResponse = await fetch(
+      "https://formsubmit.co/ajax/bookyourcampus@gmail.com",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          _subject: `New ${CITY} Session Registration`,
+          _template: "table",
+          parentName: data.parentName,
+          phone: `${data.countryCode} ${data.phone}`,
+          email: data.email,
+          studentName: data.studentName,
+          grade: data.grade,
+          school: data.school,
+          city: CITY,
+          eventDate: WHEN
+        })
+      }
+    );
+
+    if (!formResponse.ok) {
+      throw new Error(
+        "Confirmation email sent, but registration submission failed. Please contact BYC."
+      );
+    }
+
+    const result = await formResponse.json();
+
+    if (result.success === false || result.success === "false") {
+      throw new Error("Registration could not be submitted to BYC.");
+    }
+
+    setMsg(
+      "Registration successful! Your confirmation email has been sent.",
+      true
+    );
+
+    remember(REGISTERED_KEY);
+    form.reset();
+
+  } catch (error) {
+    console.error("Registration error:", error);
+    setMsg(error.message || "Something went wrong. Please try again.");
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Reserve My Session →";
+  }
+});
 
   /* ---------- Registration popup ---------- */
   // Opens shortly after page load (not once the visitor has registered for this city).
@@ -281,26 +326,6 @@
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closePopup(); });
 
   if (!recalled(REGISTERED_KEY)) setTimeout(openPopup, POPUP_DELAY_MS);
-
-  // Shapes a registration into the email BYC receives (one row per field, readable labels).
-  function toEmail(data) {
-    return {
-      _subject: `New registration (${CITY}): ${data.parentName}`,
-      _template: "table",
-      _captcha: "false",
-      _replyto: data.email,
-      "City": CITY,
-      "Event": data.event,
-      "Parent's Name": data.parentName,
-      "Phone Number": `${data.countryCode} ${data.phone}`,
-      "Email Address": data.email,
-      "Student's Name": data.studentName,
-      "Current Class": data.grade,
-      "School Name": data.school,
-      "Submitted At (IST)": new Date(data.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
-      "Page": location.href,
-    };
-  }
 
   function escapeHtml(str) {
     return str.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
