@@ -181,6 +181,7 @@
     el.addEventListener("input", () => el.closest(".field")?.classList.remove("invalid"))
   );
 
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -202,77 +203,54 @@ form.addEventListener("submit", async (e) => {
   setMsg("");
 
   try {
-    // 1. Send confirmation email to the registering user via EmailJS
-    const emailResponse = await fetch(
-      "https://api.emailjs.com/api/v1.0/email/send",
+    // Send registration to PHP backend.
+    const response = await fetch(
+      "http://localhost:8000/register.php",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          service_id: "service_0fofcvx",
-          template_id: "template_aekpoof",
-          user_id: "lAued2DOO_MRwpQXK",
-          template_params: {
-            to_email: data.email,
-            to_name: data.studentName,
-            city: "Bangalore",
-            date: "17 Oct 2026",
-            time:"10 AM – 6 PM"
-          }
-        })
-      }
-    );
-
-    if (!emailResponse.ok) {
-      throw new Error("Confirmation email failed. Please try again.");
-    }
-
-    // 2. Send registration details to your own email via FormSubmit
-    const formResponse = await fetch(
-      "https://formsubmit.co/ajax/bookyourcampus@gmail.com",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify({
-          _subject: `New ${CITY} Session Registration`,
-          _template: "table",
           parentName: data.parentName,
-          phone: `${data.countryCode} ${data.phone}`,
+          countryCode: data.countryCode,
+          phone: data.phone,
           email: data.email,
           studentName: data.studentName,
           grade: data.grade,
           school: data.school,
-          city: CITY,
-          eventDate: WHEN
+          city: typeof CITY !== "undefined" ? CITY : (data.city || ""),
+          profession: data.profession || "",
+          date: '17 Oct 2026',
+          time: '10 AM – 6 PM',
         })
       }
     );
 
-    if (!formResponse.ok) {
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
       throw new Error(
-        "Confirmation email sent, but registration submission failed. Please contact BYC."
+        result.message || "Registration failed. Please try again."
       );
     }
 
-    const result = await formResponse.json();
-
-    if (result.success === false || result.success === "false") {
-      throw new Error("Registration could not be submitted to BYC.");
+    // Registration is saved, even if email delivery failed.
+    if (result.emailSent) {
+      setMsg(
+        "Registration successful! Your confirmation email has been sent.",
+        true
+      );
+    } else {
+      setMsg(
+        "Registration successful, but the confirmation email could not be sent. Please contact BYC."
+      );
     }
-
-    setMsg(
-      "Registration successful! Your confirmation email has been sent.",
-      true
-    );
 
     remember(REGISTERED_KEY);
     form.reset();
 
+    window.location.href = "thankyou.html";
   } catch (error) {
     console.error("Registration error:", error);
     setMsg(error.message || "Something went wrong. Please try again.");
@@ -281,6 +259,7 @@ form.addEventListener("submit", async (e) => {
     submitBtn.textContent = "Book My Slot →";
   }
 });
+
 
   /* ---------- Registration popup ---------- */
   // Opens shortly after page load (not once the visitor has registered for this city).
