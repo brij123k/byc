@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thank You — Your Session is Booked | Singapore Admissions · Chennai, 24 Oct</title>
+  <meta name="description" content="Your session for the Singapore undergrad admissions event in Chennai on 24 October 2026 is confirmed. Here's what happens next." />
+  <meta name="theme-color" content="#C8102E" />
+  <meta name="robots" content="noindex, nofollow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ---------- RESET & BASE ---------- */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --red: #C8102E;
+      --red-dark: #A00D24;
+      --yellow: #FFD100;
+      --yellow-dark: #E6BC00;
+      --ink: #0F172A;
+      --ink-soft: #334155;
+      --muted: #64748B;
+      --line: #E2E8F0;
+      --bg: #F7F8FC;
+      --white: #FFFFFF;
+      --radius: 20px;
+      --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.04);
+      --shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.14);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Poppins', system-ui, sans-serif;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-weight: 700;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    img { max-width: 100%; height: auto; display: block; }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    /* ---------- HEADER ---------- */
+    .site-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+      padding: 0.9rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+
+    .logo-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--red);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .header-meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .header-meta strong { color: var(--ink); font-weight: 600; }
+
+    .header-cta {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--red);
+      border: 1.5px solid var(--red);
+      padding: 0.45rem 1rem;
+      border-radius: 40px;
+      transition: 0.15s;
+    }
+
+    .header-cta:hover { background: var(--red); color: #fff; }
+
+    /* ---------- MAIN ---------- */
+    main { flex: 1; }
+
+    /* ---------- CONFIRMATION HERO ---------- */
+    .confirm-hero {
+      padding: 3.5rem 0 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .confirm-hero::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 620px;
+      height: 620px;
+      background: radial-gradient(circle, rgba(200, 16, 46, 0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .confirm-hero .container { position: relative; z-index: 1; }
+
+    .success-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #DCFCE7;
+      color: #166534;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      padding: 0.45rem 1.1rem;
+      border-radius: 40px;
+      margin-bottom: 1.5rem;
+      animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.7); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .check-circle {
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #16A34A, #15803D);
+      display: grid;
+      place-items: center;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 12px 28px rgba(22, 163, 74, 0.28);
+      animation: pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+    }
+
+    .check-circle svg { width: 42px; height: 42px; }
+
+    .confirm-hero h1 {
+      font-size: clamp(1.9rem, 4.5vw, 3rem);
+      color: var(--ink);
+      margin-bottom: 0.85rem;
+    }
+
+    .confirm-hero h1 .hl {
+      background: linear-gradient(180deg, transparent 62%, rgba(255, 209, 0, 0.55) 62%);
+      padding: 0 0.15em;
+    }
+
+    .confirm-sub {
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      max-width: 620px;
+      margin: 0 auto 0.5rem;
+    }
+
+    .confirm-sub strong { color: var(--ink); font-weight: 600; }
+
+    .ref-pill {
+      display: inline-block;
+      margin-top: 1.1rem;
+      background: var(--white);
+      border: 1.5px dashed var(--line);
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .ref-pill strong {
+      color: var(--ink);
+      font-family: 'Poppins', monospace;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+    }
+
+    /* ---------- EVENT CARD ---------- */
+    .event-card-wrap { padding: 1rem 0 3rem; }
+
+    .event-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+      overflow: hidden;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .event-card-top {
+      background: linear-gradient(120deg, #0F172A 0%, #1E293B 100%);
+      color: #fff;
+      padding: 1.4rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .event-card-top .ec-title {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+
+    .event-card-top .ec-title span { color: var(--yellow); }
+
+    .ec-tag {
+      background: var(--yellow);
+      color: var(--ink);
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 0.35rem 0.9rem;
+      border-radius: 40px;
+      white-space: nowrap;
+    }
+
+    .event-card-body {
+      padding: 1.75rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .ec-detail { display: flex; flex-direction: column; gap: 0.2rem; }
+
+    .ec-detail small {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .ec-detail strong {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .ec-detail .icon {
+      font-size: 1.1rem;
+      margin-right: 0.35rem;
+    }
+
+    .venue-note {
+      grid-column: 1 / -1;
+      background: #FFF9E6;
+      border: 1px solid #FDE68A;
+      border-radius: 12px;
+      padding: 0.85rem 1.1rem;
+      font-size: 0.87rem;
+      color: #78350F;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+
+    .venue-note strong { color: #78350F; }
+
+    /* ---------- NEXT STEPS ---------- */
+    .next-steps { padding: 1rem 0 3.5rem; }
+
+    .section-head { text-align: center; margin-bottom: 2.2rem; }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--red);
+      background: rgba(200, 16, 46, 0.07);
+      padding: 0.35rem 0.95rem;
+      border-radius: 40px;
+      margin-bottom: 0.9rem;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-head p {
+      color: var(--ink-soft);
+      max-width: 560px;
+      margin: 0 auto;
+      font-size: 0.98rem;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .step-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      padding: 1.6rem 1.5rem;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+
+    .step-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+    }
+
+    .step-num {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--red);
+      margin-bottom: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .step-num::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .step-icon {
+      font-size: 1.6rem;
+      margin-bottom: 0.7rem;
+      display: block;
+    }
+
+    .step-card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .step-card p {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+    }
+
+    .step-card p strong { color: var(--ink); }
+
+    /* ---------- WHATSAPP / CONTACT ---------- */
+    .contact-strip {
+      padding: 0 0 3.5rem;
+    }
+
+    .contact-box {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      padding: 1.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .contact-box h3 {
+      font-size: 1.15rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .contact-box p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .contact-actions {
+      display: flex;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 40px;
+      border: none;
+      cursor: pointer;
+      transition: 0.18s;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--red);
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(200, 16, 46, 0.22);
+    }
+
+    .btn-primary:hover {
+      background: var(--red-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px rgba(200, 16, 46, 0.3);
+    }
+
+    .btn-outline {
+      background: #fff;
+      color: var(--ink);
+      border: 1.5px solid var(--line);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--ink);
+      background: #F8FAFC;
+    }
+
+    .btn-whatsapp {
+      background: #25D366;
+      color: #fff;
+    }
+
+    .btn-whatsapp:hover {
+      background: #1EBE57;
+      transform: translateY(-1px);
+    }
+
+    /* ---------- ADD TO CALENDAR ---------- */
+    .cal-actions {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 1.4rem;
+    }
+
+    .cal-actions .btn { font-size: 0.82rem; padding: 0.6rem 1.2rem; }
+
+    /* ---------- FINAL CTA ---------- */
+    .final-cta {
+      background: linear-gradient(120deg, #0F172A 0%, #1E293B 100%);
+      color: #fff;
+      padding: 3.5rem 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255, 209, 0, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .final-cta .container { position: relative; z-index: 1; }
+
+    .final-cta h2 {
+      font-size: clamp(1.5rem, 3.4vw, 2.2rem);
+      margin-bottom: 0.8rem;
+    }
+
+    .final-cta h2 span {
+      background: linear-gradient(180deg, transparent 62%, rgba(255, 209, 0, 0.35) 62%);
+      padding: 0 0.1em;
+    }
+
+    .final-cta p {
+      color: #CBD5E1;
+      max-width: 540px;
+      margin: 0 auto 1.8rem;
+      font-size: 0.98rem;
+    }
+
+    .final-cta p strong { color: #fff; }
+
+    .btn-yellow {
+      background: var(--yellow);
+      color: var(--ink);
+      box-shadow: 0 8px 22px rgba(255, 209, 0, 0.28);
+    }
+
+    .btn-yellow:hover {
+      background: var(--yellow-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 28px rgba(255, 209, 0, 0.36);
+    }
+
+    /* ---------- FOOTER ---------- */
+    .site-footer {
+      background: var(--white);
+      border-top: 1px solid var(--line);
+      padding: 1.5rem 0;
+      text-align: center;
+    }
+
+    .site-footer p {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .site-footer a { color: var(--red); font-weight: 500; }
+
+    /* ---------- CONFETTI (decorative) ---------- */
+    .confetti {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .confetti i {
+      position: absolute;
+      width: 9px; height: 9px;
+      border-radius: 2px;
+      opacity: 0.85;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-10vh) rotate(0deg); opacity: 0.9; }
+      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 700px) {
+      .header-meta { display: none; }
+      .header-cta { font-size: 0.78rem; padding: 0.4rem 0.85rem; }
+      .confirm-hero { padding: 2.5rem 0 1.5rem; }
+      .event-card-body { padding: 1.4rem; gap: 1.1rem; }
+      .contact-box { padding: 1.4rem 1.3rem; }
+      .contact-actions { width: 100%; }
+      .contact-actions .btn { flex: 1; }
+      .cal-actions .btn { flex: 1 1 45%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Decorative confetti container (populated by JS) -->
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header">
+    <div class="container header-inner">
+
+      <div class="header-meta">
+        Singapore Admissions · <strong>Chennai, 24 Oct 2026</strong>
+      </div>
+      <a href="/" class="header-cta">← Back to home</a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============ CONFIRMATION HERO ============ -->
+    <section class="confirm-hero">
+      <div class="container">
+        <div class="success-badge">
+          <span>✓</span> Session Confirmed
+        </div>
+
+        <div class="check-circle" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4 12.5 9.5 18 20 6.5"></polyline>
+          </svg>
+        </div>
+
+        <h1>You're in. <span class="hl">Your session is booked.</span></h1>
+
+        <p class="confirm-sub">
+          Thank you for registering for <strong>Singapore Admissions Are Competitive — Get Clarity Before You Apply</strong>.
+          A confirmation email is on its way to your inbox.
+        </p>
+
+        <div class="ref-pill">
+          Reference: <strong id="refCode">BYC-CHN-XXXX</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ EVENT CARD ============ -->
+    <section class="event-card-wrap">
+      <div class="container">
+        <div class="event-card">
+          <div class="event-card-top">
+            <div class="ec-title">Singapore Admissions · <span>Get Clarity Before You Apply</span></div>
+            <span class="ec-tag">In Person</span>
+          </div>
+          <div class="event-card-body">
+            <div class="ec-detail">
+              <small>City</small>
+              <strong><span class="icon">📍</span>Chennai</strong>
+            </div>
+            <div class="ec-detail">
+              <small>Date</small>
+              <strong><span class="icon">📅</span>Sat, 24 Oct 2026</strong>
+            </div>
+            <div class="ec-detail">
+              <small>Time</small>
+              <strong><span class="icon">⏰</span>10 AM – 6 PM</strong>
+            </div>
+            <div class="ec-detail">
+              <small>For</small>
+              <strong><span class="icon">👨‍👩‍👧</span>Students &amp; Parents</strong>
+            </div>
+
+            <div class="venue-note">
+              <span>📌</span>
+              <span><strong>Venue details coming soon.</strong> We'll email you the exact address and a location pin closer to the event date.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add to calendar buttons -->
+        <div class="cal-actions">
+          <a class="btn btn-outline" id="gcalBtn" href="#" target="_blank" rel="noopener">📅 Add to Google Calendar</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Book Your Campus. All rights reserved. · <a href="/">bookyourcampus.com</a></p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* ---------- 1. GENERATE REFERENCE CODE ---------- */
+      const refEl = document.getElementById('refCode');
+      if (refEl) {
+        const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+        const time = Date.now().toString(36).slice(-3).toUpperCase();
+        refEl.textContent = `BYC-CHN-${random}${time}`;
+      }
+
+      /* ---------- 2. ADD-TO-CALENDAR LINKS ---------- */
+      const EVENT = {
+        title: 'Singapore Admissions Are Competitive — Get Clarity Before You Apply (Chennai)',
+        location: 'Chennai, India',
+        details: 'Understand admissions, profile expectations and application planning for top Singapore universities (NUS, NTU, SMU, SUTD). For students and parents (Class 6–12).',
+        start: '20261024T043000Z', // 10:00 IST = 04:30 UTC
+        end:   '20261024T123000Z'  // 18:00 IST = 12:30 UTC
+      };
+
+      const gcalBtn = document.getElementById('gcalBtn');
+      if (gcalBtn) {
+        const gcalUrl = new URL('https://calendar.google.com/calendar/render');
+        gcalUrl.searchParams.set('action', 'TEMPLATE');
+        gcalUrl.searchParams.set('text', EVENT.title);
+        gcalUrl.searchParams.set('dates', `${EVENT.start}/${EVENT.end}`);
+        gcalUrl.searchParams.set('details', EVENT.details);
+        gcalUrl.searchParams.set('location', EVENT.location);
+        gcalBtn.href = gcalUrl.toString();
+      }
+
+      const icsBtn = document.getElementById('icsBtn');
+      if (icsBtn) {
+        const icsLines = [
+          'BEGIN:VCALENDAR',
+          'VERSION:2.0',
+          'PRODID:-//Book Your Campus//Chennai Singapore Session//EN',
+          'CALSCALE:GREGORIAN',
+          'BEGIN:VEVENT',
+          `UID:${Date.now()}@bookyourcampus.com`,
+          `DTSTAMP:${new Date().toISOString().replace(/[-:.]/g, '').slice(0, 15)}Z`,
+          `DTSTART:${EVENT.start}`,
+          `DTEND:${EVENT.end}`,
+          `SUMMARY:${EVENT.title}`,
+          `DESCRIPTION:${EVENT.details}`,
+          `LOCATION:${EVENT.location}`,
+          'STATUS:CONFIRMED',
+          'END:VEVENT',
+          'END:VCALENDAR'
+        ];
+        const icsBlob = new Blob([icsLines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+        icsBtn.href = URL.createObjectURL(icsBlob);
+      }
+
+      /* ---------- 3. DECORATIVE CONFETTI (subtle, once) ---------- */
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!prefersReduced) {
+        const confettiBox = document.getElementById('confetti');
+        const colors = ['#C8102E', '#FFD100', '#0F172A', '#16A34A', '#2563EB'];
+        const COUNT = 34;
+
+        for (let i = 0; i < COUNT; i++) {
+          const piece = document.createElement('i');
+          piece.style.left = Math.random() * 100 + 'vw';
+          piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+          piece.style.animationDuration = (2.6 + Math.random() * 2.4) + 's';
+          piece.style.animationDelay = (Math.random() * 0.9) + 's';
+          piece.style.width = piece.style.height = (6 + Math.random() * 7) + 'px';
+          if (Math.random() > 0.5) piece.style.borderRadius = '50%';
+          confettiBox.appendChild(piece);
+        }
+
+        setTimeout(() => { confettiBox.innerHTML = ''; }, 6500);
+      }
+
+      /* ---------- 4. PERSONALISE WITH NAME FROM QUERY STRING ---------- */
+      const params = new URLSearchParams(window.location.search);
+      const name = params.get('name');
+      const heading = document.querySelector('.confirm-hero h1');
+      if (name && heading) {
+        heading.innerHTML = `You're in, ${escapeHtml(name)}. <span class="hl">Your session is booked.</span>`;
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+    })();
+  </script>
+</body>
+</html>
