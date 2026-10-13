@@ -204,7 +204,7 @@
   try {
     // Send registration to PHP backend.
     const response = await fetch(
-      "http://localhost:8000/register.php",
+      "https://bookyourcampus.com/backend/register.php",
       {
         method: "POST",
         headers: {
